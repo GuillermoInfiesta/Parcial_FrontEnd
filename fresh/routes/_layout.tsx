@@ -9,7 +9,7 @@ const Layout = (props: PageProps) => {
         <a href="/DictionaryCSR">Client Side</a>
         <a href="/DictionarySSR">Server Side</a>
       </div>
-      <h1>My dictionary</h1>
+      <h1>My Dictionary</h1>
       <Component />
     </div>
   );

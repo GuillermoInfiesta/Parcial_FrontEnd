@@ -1,6 +1,7 @@
 import { useState } from "preact/hooks";
 import { FunctionComponent } from "preact";
 import DeffinitionDisplay from "../components/DeffinitionDisplay.tsx";
+import DefinitionsArrayDisplay from "../components/DefinitionsArrDisplay.tsx";
 
 export type Definition = {
   definition: string;
@@ -11,14 +12,15 @@ export type DefinitionsSet = {
 };
 const DictionaryCSR: FunctionComponent = () => {
   const [word, setWord] = useState<string>("");
+  const [lastSearch, setLastSearch] = useState<string>("");
   const [definitions, setDefinitions] = useState<Definition[]>([]);
   const [error, setError] = useState<string>("");
   const searchWord = async () => {
-    setDefinitions([]);
     if (word === "") {
       setError("Please enter a word");
       return;
     }
+    setDefinitions([]);
     console.log("Searching");
     console.log(definitions);
     const response = await fetch(
@@ -35,30 +37,32 @@ const DictionaryCSR: FunctionComponent = () => {
       });
     });
     setDefinitions(newDefs);
+    setLastSearch(word);
     console.log(definitions);
   };
   return (
-    <div>
-      <div class="gray-borders">
-        <input
-          placeholder="Type a word"
-          type="text"
-          onInput={(e) => setWord(e.currentTarget.value)}
-          onFocus={() => setError("")}
-        />
-        <button onClick={searchWord}>Search</button>
-      </div>
-      {error !== "" && <span>{error}</span>}
-      {definitions.length !== 0 && (
-        <div class="gray-borders">
-          {definitions.map((def) => (
-            <DeffinitionDisplay
-              definition={def.definition}
-              example={def.example}
-            />
-          ))}
+    <div class="width-100">
+      <div class="search-bar">
+        <div class="search-form">
+          <input
+            placeholder="Type a word"
+            type="text"
+            onInput={(e) => {
+              setWord(e.currentTarget.value);
+              setError("");
+            }}
+          />
+          <button onClick={searchWord}>Search</button>
         </div>
-      )}
+        {error !== "" && <p class="error">{error}</p>}
+      </div>
+      {definitions.length !== 0 &&
+        (
+          <DefinitionsArrayDisplay
+            word={lastSearch}
+            definitions={definitions}
+          />
+        )}
     </div>
   );
 };
