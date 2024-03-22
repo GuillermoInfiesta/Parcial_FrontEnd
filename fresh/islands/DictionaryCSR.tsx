@@ -20,6 +20,7 @@ const DictionaryCSR: FunctionComponent = () => {
       setError("Please enter a word");
       return;
     }
+    setLastSearch(word);
     setDefinitions([]);
     console.log("Searching");
     console.log(definitions);
@@ -37,7 +38,6 @@ const DictionaryCSR: FunctionComponent = () => {
       });
     });
     setDefinitions(newDefs);
-    setLastSearch(word);
     console.log(definitions);
   };
   return (
@@ -56,7 +56,7 @@ const DictionaryCSR: FunctionComponent = () => {
         </div>
         {error !== "" && <p class="error">{error}</p>}
       </div>
-      {definitions.length !== 0 &&
+      {lastSearch !== "" &&
         (
           <DefinitionsArrayDisplay
             word={lastSearch}
